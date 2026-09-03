@@ -49,6 +49,39 @@ const stripe = new THREE.Mesh(
 stripe.position.y = PLATFORM_HEIGHT / 2 + 0.01;
 platform.add(stripe);
 
+// --- Turret: yawing base (child of platform) + pitching head (child of base) ---
+// Conventions: the head's barrel points down local +Z. Base yaw is rotation
+// about local Y; head pitch is rotation about local X (negative X = up).
+const turretBase = new THREE.Group();
+turretBase.position.set(PLATFORM_RADIUS - 0.6, PLATFORM_HEIGHT / 2, 0);
+platform.add(turretBase);
+
+const pedestal = new THREE.Mesh(
+  new THREE.CylinderGeometry(0.35, 0.45, 0.5, 24),
+  new THREE.MeshStandardMaterial({ color: 0x4a545e }),
+);
+pedestal.position.y = 0.25;
+turretBase.add(pedestal);
+
+const HEAD_PIVOT_HEIGHT = 0.6;
+const turretHead = new THREE.Group();
+turretHead.position.y = HEAD_PIVOT_HEIGHT;
+turretBase.add(turretHead);
+
+const headBody = new THREE.Mesh(
+  new THREE.BoxGeometry(0.5, 0.35, 0.5),
+  new THREE.MeshStandardMaterial({ color: 0x7a8794 }),
+);
+turretHead.add(headBody);
+
+const barrel = new THREE.Mesh(
+  new THREE.CylinderGeometry(0.07, 0.07, 0.9, 12),
+  new THREE.MeshStandardMaterial({ color: 0x2f353b }),
+);
+barrel.rotation.x = Math.PI / 2; // cylinder's long axis onto +Z
+barrel.position.z = 0.55;
+turretHead.add(barrel);
+
 // --- Drone flying a fast 3D parametric path ---
 const drone = new THREE.Mesh(
   new THREE.ConeGeometry(0.25, 0.6, 8),
