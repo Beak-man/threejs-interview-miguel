@@ -150,8 +150,17 @@ function updateTurret(delta: number): void {
   turretBase.worldToLocal(targetLocal);
   targetLocal.sub(turretHead.position);
   const horizontalDist = Math.hypot(targetLocal.x, targetLocal.z);
+  // Manually adding a throttled log
+  if (Math.random() < 0.05) {
+  console.log(
+    'yawErr°', THREE.MathUtils.radToDeg(Math.atan2(targetLocal.x, targetLocal.z)).toFixed(1),
+    'pitch(hypot)°', THREE.MathUtils.radToDeg(Math.atan2(targetLocal.y, horizontalDist)).toFixed(1),
+    'pitch(z)°', THREE.MathUtils.radToDeg(Math.atan2(targetLocal.y, targetLocal.z)).toFixed(1),
+  );
+}
   const targetPitch = THREE.MathUtils.clamp(
-    Math.atan2(targetLocal.y, horizontalDist),
+    // Math.atan2(targetLocal.y, horizontalDist),
+    Math.atan2(targetLocal.y, targetLocal.z) // Deliberately breaking the turret's pitch to test if turret slams vertical in close passes
     0,
     Math.PI / 2,
   );

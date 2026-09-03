@@ -42,3 +42,18 @@ Execute these 2 steps:
 Do not run tests or attempt to commit and push to remote. Just write the files and output a brief confirmation.
 ```
 
+## Prompt 3
+
+```
+I am reviewing the turret tracking logic you generated. Do NOT edit any code in your response; I only want an explanation and validation steps.
+
+I commented out the `turretBase.updateMatrixWorld(true);` line right before the head pitch calculation, and the app behaves exactly the same. 
+
+My hypothesis: Because the base only yaws on the Y-axis, the local horizontal distance (`Math.hypot(x, z)`) and local `y` height remain constant regardless of the yaw matrix state. Therefore, that mid-tick matrix update is mathematically redundant for the pitch calculation in this specific rig.
+
+Confirm if this hypothesis is correct. Then, give me specific, step-by-step instructions on how to manually validate your math in my editor. I want to know exactly what lines to temporarily alter or log to visually and numerically prove:
+1. Why `Math.hypot(targetLocal.x, targetLocal.z)` is strictly necessary instead of just using `targetLocal.z`.
+2. What happens to the tracking math when the base yaw hits the 90 deg/sec cap and lags behind the drone.
+```
+
+
