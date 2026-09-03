@@ -160,7 +160,7 @@ function updateTurret(delta: number): void {
 }
   const targetPitch = THREE.MathUtils.clamp(
     // Math.atan2(targetLocal.y, horizontalDist),
-    Math.atan2(targetLocal.y, targetLocal.z) // Deliberately breaking the turret's pitch to test if turret slams vertical in close passes
+    Math.atan2(targetLocal.y, targetLocal.z), // Deliberately breaking the turret's pitch to test if turret slams vertical in close passes
     0,
     Math.PI / 2,
   );
