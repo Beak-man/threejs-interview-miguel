@@ -30,3 +30,15 @@ Implement the tracking logic in the render loop. You must strictly adhere to the
 
 Stop when done. Output a concise summary of your implementation and print the exact code block you wrote for the turret tracking logic inside the render loop.
 ```
+
+## Prompt 2
+
+```
+Configure this project for deployment to GitHub Pages using GitHub Actions. 
+Execute these 2 steps:
+1. Update `vite.config.ts` (create it if it doesn't exist) to set the `base` path to `/threejs-interview-miguel/`.
+2. Create a standard GitHub Actions workflow file at `.github/workflows/deploy.yml` that builds the project using `npm run build` and deploys the `dist` folder to GitHub Pages.
+
+Do not run tests or attempt to commit and push to remote. Just write the files and output a brief confirmation.
+```
+
