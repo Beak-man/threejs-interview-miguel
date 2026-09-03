@@ -6,7 +6,11 @@ I used an adversarial code review workflow between Gemini Pro 3.1 and Claude Fab
 - LLMs have become incredibly good at choosing and implementing math, but their capacity to visually validate interactive 3D graphics is still limited. All their assumptions stem from the math and unit tests, but their capacity for functional tests is still limited (more on this in the last section). This is where I step in and why I keep the process manual until frontier models catch up for interactive 3D apps.
 - The usage of models from two different families decreases the potential for hallucination biases. Both models can be wrong, but when that happens, they're usually wrong in different ways, making it easier for a human coder to detect hallucinations and biases.
 - Why Gemini Pro 3.1 if it is relatively low-powered compared to Fable 5? Cost optimization. Gemini is low-priced and while it's not as nearly as capable as the frontier models (like Fable 5 and GPT-5.6 Sol), it's more than enough for prompt-engineering and investigating larger architectural decisions, leaving the frontier model in my setup (Fable 5) to do the heavy math and coding work. Gemini does have one technical advantage: A larger context window than models from Anthropic or Open AI.
-- The full chat with Gemini for this project can be seen here: https://share.gemini.google/GqbeMazXNyoK
+
+## Full chat transcripts
+
+- Gemini: https://share.gemini.google/GqbeMazXNyoK
+- Claude: https://github.com/Beak-man/threejs-interview-miguel/blob/main/full_chat_transcript.md
 
 ## What was delegated to AI
 
