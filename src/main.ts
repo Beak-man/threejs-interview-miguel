@@ -117,8 +117,8 @@ function updateDrone(t: number): void {
 // --- Turret tracking ---
 // Exact target orientations are computed each frame in local space; the only
 // smoothing is the hard 90 deg/s cap enforced via Quaternion.rotateTowards.
-// const MAX_TURRET_SPEED = Math.PI / 2; // 90 deg/s
-const MAX_TURRET_SPEED = 100 // Testing turret speed for perfect tracking (breaking the specification)
+const MAX_TURRET_SPEED = Math.PI / 2; // 90 deg/s
+// const MAX_TURRET_SPEED = 100 // Testing turret speed for perfect tracking (breaking the specification)
 
 const droneWorldPos = new THREE.Vector3();
 const targetLocal = new THREE.Vector3();
@@ -140,13 +140,13 @@ function updateTurret(delta: number): void {
   targetLocal.sub(turretBase.position);
   const targetYaw = Math.atan2(targetLocal.x, targetLocal.z);
   baseTargetQuat.setFromEuler(targetEuler.set(0, targetYaw, 0));
-  // turretBase.quaternion.rotateTowards(baseTargetQuat, MAX_TURRET_SPEED * delta); // Comment this out to validate behavior above the 90 deg/s limit (breaking the specification)
+  turretBase.quaternion.rotateTowards(baseTargetQuat, MAX_TURRET_SPEED * delta); // Comment this out to validate behavior above the 90 deg/s limit (breaking the specification)
   // The following lines are a throttled log of the lag and applied rotation rate, to validate that the turret is indeed capped at 90 deg/s.
-  const before = turretBase.quaternion.clone();
-  turretBase.quaternion.rotateTowards(baseTargetQuat, MAX_TURRET_SPEED * delta);
-  const lagDeg = THREE.MathUtils.radToDeg(turretBase.quaternion.angleTo(baseTargetQuat));
-  const rateDeg = THREE.MathUtils.radToDeg(before.angleTo(turretBase.quaternion)) / delta;
-  if (Math.random() < 0.05) console.log('lag°', lagDeg.toFixed(1), 'applied°/s', rateDeg.toFixed(1));
+  // const before = turretBase.quaternion.clone();
+  // turretBase.quaternion.rotateTowards(baseTargetQuat, MAX_TURRET_SPEED * delta);
+  // const lagDeg = THREE.MathUtils.radToDeg(turretBase.quaternion.angleTo(baseTargetQuat));
+  // const rateDeg = THREE.MathUtils.radToDeg(before.angleTo(turretBase.quaternion)) / delta;
+  // if (Math.random() < 0.05) console.log('lag°', lagDeg.toFixed(1), 'applied°/s', rateDeg.toFixed(1));
 
   // The base just moved; refresh its subtree before computing in its space.
   turretBase.updateMatrixWorld(true);
@@ -182,11 +182,13 @@ window.addEventListener('resize', () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
-const clock = new THREE.Clock();
+const timer = new THREE.Timer();
+timer.connect(document);
 
 function render() {
-  const delta = clock.getDelta();
-  const elapsed = clock.elapsedTime;
+  timer.update();
+  const delta = timer.getDelta();
+  const elapsed = timer.getElapsed();
 
   platform.rotation.y += PLATFORM_SPIN_SPEED * delta;
   updateDrone(elapsed);

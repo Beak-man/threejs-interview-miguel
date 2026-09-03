@@ -70,5 +70,22 @@ And I agree it's a good idea to leave the turretBase.updateMatrixWorld(true);. I
 Give me your thoughts and I'll manually work on the second validation test.
 ```
 
+## Prompt 5
+
+```
+Do not edit any code. This prompt is an acknowledgment and to analyze your thought process regarding your architectural choices regarding Three.js.
+
+Both validations do break the specification and I think they're sufficient to validate the tracking math.
+
+There's another concern. The code editor strikethroughs the Clock Three.js object (line 185) to notify that it is deprecated. After reviewing the documentation:
+
+https://threejs.org/docs/?q=Clock#Clock
+
+"Deprecated: since r183."
+
+Given that the spec mandates the usage of version version 0.185.1 (I can see that the correct version is listed as depency in package.json), explain to me why did you choose to use this deprecated Clock, what potential concerns could this introduce, and potential fixes if any. My sense is that this was simply a decision stemming from your training, you're not manually verifying the documentation of the project's dependencies in every step of the way.
+```
+
+
 
 
