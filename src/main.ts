@@ -142,7 +142,7 @@ function updateTurret(delta: number): void {
   turretBase.quaternion.rotateTowards(baseTargetQuat, MAX_TURRET_SPEED * delta);
 
   // The base just moved; refresh its subtree before computing in its space.
-  // turretBase.updateMatrixWorld(true); // Comment this line to see the turret lag behind the drone.
+  turretBase.updateMatrixWorld(true);
 
   // Head pitch: express the drone in the base's local space (the head's
   // parent). Elevation angle, clamped so the head never dips below horizontal.
