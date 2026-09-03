@@ -114,6 +114,52 @@ function updateDrone(t: number): void {
   }
 }
 
+// --- Turret tracking ---
+// Exact target orientations are computed each frame in local space; the only
+// smoothing is the hard 90 deg/s cap enforced via Quaternion.rotateTowards.
+const MAX_TURRET_SPEED = Math.PI / 2; // 90 deg/s
+
+const droneWorldPos = new THREE.Vector3();
+const targetLocal = new THREE.Vector3();
+const baseTargetQuat = new THREE.Quaternion();
+const headTargetQuat = new THREE.Quaternion();
+const targetEuler = new THREE.Euler();
+
+function updateTurret(delta: number): void {
+  drone.getWorldPosition(droneWorldPos);
+
+  // The platform rotated this frame; refresh world matrices before any
+  // world-to-local conversion.
+  platform.updateMatrixWorld(true);
+
+  // Base yaw: express the drone in the platform's local space (the base's
+  // parent), aim local +Z at it, and build the exact target quaternion.
+  targetLocal.copy(droneWorldPos);
+  platform.worldToLocal(targetLocal);
+  targetLocal.sub(turretBase.position);
+  const targetYaw = Math.atan2(targetLocal.x, targetLocal.z);
+  baseTargetQuat.setFromEuler(targetEuler.set(0, targetYaw, 0));
+  turretBase.quaternion.rotateTowards(baseTargetQuat, MAX_TURRET_SPEED * delta);
+
+  // The base just moved; refresh its subtree before computing in its space.
+  turretBase.updateMatrixWorld(true);
+
+  // Head pitch: express the drone in the base's local space (the head's
+  // parent). Elevation angle, clamped so the head never dips below horizontal.
+  targetLocal.copy(droneWorldPos);
+  turretBase.worldToLocal(targetLocal);
+  targetLocal.sub(turretHead.position);
+  const horizontalDist = Math.hypot(targetLocal.x, targetLocal.z);
+  const targetPitch = THREE.MathUtils.clamp(
+    Math.atan2(targetLocal.y, horizontalDist),
+    0,
+    Math.PI / 2,
+  );
+  // Positive rotation.x pitches +Z downward, so pitch up is negative X.
+  headTargetQuat.setFromEuler(targetEuler.set(-targetPitch, 0, 0));
+  turretHead.quaternion.rotateTowards(headTargetQuat, MAX_TURRET_SPEED * delta);
+}
+
 window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
@@ -128,6 +174,7 @@ function render() {
 
   platform.rotation.y += PLATFORM_SPIN_SPEED * delta;
   updateDrone(elapsed);
+  updateTurret(delta);
 
   controls.update();
   renderer.render(scene, camera);
