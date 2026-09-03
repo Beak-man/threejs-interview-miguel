@@ -56,4 +56,19 @@ Confirm if this hypothesis is correct. Then, give me specific, step-by-step inst
 2. What happens to the tracking math when the base yaw hits the 90 deg/sec cap and lags behind the drone.
 ```
 
+## Prompt 4
+
+```
+Don't edit any code. This is a prompt to validate your first validation test.
+
+Focusing on the first validation test. After switching Math.atan2(targetLocal.y, horizontalDist) for Math.atan2(targetLocal.y, targetLocal.z), the turret does get stuck at the vertical way more often (when the drone occupies the space behind it), but it doesn't "slam" (i.e. snaps abruptly to the vertical). It smoothly transitions to the vertical and gets stuck there way more often. I think You're not considering the rotateTowards cap that's overriding the mathematical spike for this test.
+
+In any case, I think validation test 1 is valid, with this caveat.
+
+And I agree it's a good idea to leave the turretBase.updateMatrixWorld(true);. It's overengineered for this specific test but it's a sound architectural design for something that could increase its scope.
+
+Give me your thoughts and I'll manually work on the second validation test.
+```
+
+
 
